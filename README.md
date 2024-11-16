@@ -1,7 +1,7 @@
 # Uploading temperature sensor data in Thing Speak cloud
 ## NAME: GANESH R
-## REGISTER NO: 212222240029
-## DATE:
+## REG NO: 212222240029
+## DATE: 
 # AIM:
 To monitor the temperature sensor data in the Thing speak using an ESP32 controller.
 
@@ -71,75 +71,77 @@ Automatically act on your data and communicate using third-party services like T
 
 ![image](https://user-images.githubusercontent.com/71547910/235334056-3ba9579f-2f62-43b1-a714-8fde6cf9ef32.png)
 
+
 # PROGRAM:
-```c
-#include"ThingSpeak.h"
+```
+#include "ThingSpeak.h"
 #include <WiFi.h>
 #include "DHT.h"
+//#include <OneWire.h>
+//#include <DallasTemperature.h>
 
-char ssid[]="xx";
-char pass[]="xyz";
+char ssid[] = "OnePlus Nord CE3 5G"; // Your WiFi SSID
+char pass[] = "kugipapa";  // Your WiFi password
 
-const int t=25;
+const int out = 23; // Pin for temperature sensor data
+long T;
+float temperature = 0; // Initialize temperature
 WiFiClient client;
-DHT dht(25, DHT11);
+DHT dht(23, DHT11);
 
-unsigned long myChannelField = 2492690;
-const int ChannelField1 = 1 ; 
-const int ChannelField2 = 2 ;
-const char *myWriteAPIKey="RF8WCRR152XWWRQW";
+unsigned long myChannelField = 2729898; // Channel ID
+const int TemperatureField = 1;          // Field for temperature data
+const int HumidityField = 2;          // Field for humidity data
 
-void setup()
-{
+const char* myWriteAPIKey = "3GOFMP6JS7YN87OV"; // Your write API Key
+
+// Temperature sensor setup
+void setup() {
   Serial.begin(115200);
-  pinMode (t,OUTPUT);
-  WiFi.mode(WIFI_STA);
+  pinMode(out, INPUT); // Set pin mode to input for temperature sensor
   ThingSpeak.begin(client);
   dht.begin();
   delay(1000);
-}
+ }
 
-void loop()
+void loop() 
 {
-  if(WiFi.status()!=WL_CONNECTED)
+  if (WiFi.status() != WL_CONNECTED) 
   {
-    Serial.print("Attempting to connet to SSID: "); 
+Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
-    while(WiFi.status() != WL_CONNECTED)
+    while (WiFi.status() != WL_CONNECTED) 
     {
       WiFi.begin(ssid, pass);
       Serial.print(".");
       delay(5000);
     }
-    Serial.println("\nConnected");
+    Serial.println("\nConnected.");
   }
+
+  // Read temperature
   float temperature = dht.readTemperature();
   float humidity = dht.readHumidity();
-  delay(1000);
+  
   Serial.print("Temperature: ");
   Serial.print(temperature);
-  Serial.println(" *C");
-  ThingSpeak.writeField(myChannelField, ChannelField1, temperature, myWriteAPIKey);
-  Serial.print("Humidity: ");
-  Serial.print(humidity);
+  Serial.println(" °C");
+
+  Serial.print("Humidity ");
+Serial.print(humidity);
   Serial.println(" g.m-3");
-  ThingSpeak.writeField(myChannelField, ChannelField2, humidity, myWriteAPIKey);
-  delay(1000);
+// Write temperature to ThingSpeak
+  ThingSpeak.writeField(myChannelField, TemperatureField, temperature, myWriteAPIKey); // Write temperature to ThingSpeak
+  ThingSpeak.writeField(myChannelField, HumidityField, humidity, myWriteAPIKey); // Write humidity to ThingSpeak
+ delay(100);
 }
 ```
-
 # CIRCUIT DIAGRAM:
-![image](https://github.com/user-attachments/assets/18399935-aff1-4881-aa09-b03990b04c69)
+![image](https://github.com/user-attachments/assets/0ce952f4-ab2f-47f4-826f-aa2dbd7ec35b)
 
 
 # OUTPUT:
-## THINGSPEAK
-![image](https://github.com/user-attachments/assets/bc32ceff-5673-4ba1-8a06-2edb6d50c6d0)
-
-
-## SERIAL MONITOR
-![image](https://github.com/user-attachments/assets/e46ec3af-6f92-4177-9897-81bb4ed2df9f)
-
+![image](https://github.com/user-attachments/assets/44dafbb1-fc99-441f-b4bf-185e35fd00ef)
 
 # RESULT:
 
