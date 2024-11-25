@@ -1,7 +1,7 @@
-# Uploading temperature sensor data in Thing Speak cloud
+# EX 03 Uploading temperature sensor data in Thing Speak cloud
 ## NAME: GANESH R
 ## REG NO: 212222240029
-## DATE: 
+## DATE: 23.10.2024
 # AIM:
 To monitor the temperature sensor data in the Thing speak using an ESP32 controller.
 
